@@ -54,11 +54,11 @@ std::vector<std::vector<int32_t>> GenerateRandomVectors(
     }
     if (i % 2 == 0)
     {
-      std::sort(randomVector.begin(), randomVector.end(), std::less<int32_t>());
+      std::sort(randomVector.begin(), randomVector.end(), std::greater<int32_t>());
     }
     else
     {
-      std::sort(randomVector.begin(), randomVector.end(), std::greater<int32_t>());
+      std::sort(randomVector.begin(), randomVector.end(), std::less<int32_t>());
     }
     randomVectors.push_back(std::move(randomVector));
   }
