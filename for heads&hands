@@ -1,0 +1,72 @@
+#include <unordered_set>
+#include <random>
+#include <iostream>
+#include <algorithm>
+
+
+template <class T>
+void print_vec_vec(const std::vector<std::vector<T>>& vectors)
+{
+  for (const auto& vector : vectors)
+  {
+    for (const auto elem : vector)
+    {
+      std::cout << elem << " ";
+    }
+    std::cout << std::endl;
+  }
+}
+
+std::vector<std::vector<int32_t>> GenerateRandomVectors(
+  size_t numberOfElements,
+  uint32_t maxLengthMassive = 20,
+  int32_t maxValueForRandomVecrtor = 20,
+  int32_t minValueForRandomVector = -20)
+{
+  std::random_device rd;
+  std::mt19937 gen(rd());
+
+  std::vector<std::vector<int32_t>> randomVectors;
+
+  if (maxLengthMassive < 2 * numberOfElements)
+  {
+    std::cout << "Bad input maxLengthMassive is small" << std::endl;
+    return randomVectors;
+  }
+
+  std::unordered_set<uint32_t> setFromRandomsDifrNumbers;
+  for (size_t i = 0; i <= numberOfElements; ++i)
+  {
+    std::uniform_int_distribution<> distribForSize(
+      1, maxLengthMassive);
+    uint32_t newRandomNumber = distribForSize(gen);
+    while (setFromRandomsDifrNumbers.find(newRandomNumber) != setFromRandomsDifrNumbers.end())
+    {
+      newRandomNumber = distribForSize(gen);
+    }
+    setFromRandomsDifrNumbers.insert(newRandomNumber);
+    std::vector<int32_t> randomVector;
+    for (uint32_t subIndex = 0; subIndex < newRandomNumber; ++subIndex)
+    {
+      std::uniform_int_distribution<> distribForNumber(
+        minValueForRandomVector, maxValueForRandomVecrtor);
+      randomVector.push_back(distribForNumber(gen));
+    }
+    if (i % 2 == 0)
+    {
+      std::sort(randomVector.begin(), randomVector.end(), std::less<int32_t>());
+    }
+    else
+    {
+      std::sort(randomVector.begin(), randomVector.end(), std::greater<int32_t>());
+    }
+    randomVectors.push_back(std::move(randomVector));
+  }
+  return randomVectors;
+}
+
+
+int main()
+{
+  print_vec_vec(GenerateRandomVectors(10));
+}
